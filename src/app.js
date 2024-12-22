@@ -1,5 +1,6 @@
 import express from 'express'
 import productRouter from './routes/products.router.js'
+import cartsRouter from './routes/carts.router.js'
 import viewsRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
 
@@ -24,7 +25,7 @@ app.use(express.static('public'))
 
 app.use('/api/products', productRouter)
 
-app.use('/cart', productRouter)
+app.use('/api/carts', cartsRouter)
 
 app.use('/',viewsRouter)
 
