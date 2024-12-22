@@ -4,8 +4,6 @@ import { leerProductos, buscarProducto, agregarProductos, eliminarProductos, mod
 
 const router = express.Router()
 
-
-
 router.get('/', async (req, res) => {
     try {
         const productos = await leerProductos()
@@ -23,11 +21,12 @@ router.get('/:id', async (req, res)=>{
         const producto = await buscarProducto(parseInt(idProducto,10))
         if(producto){
             res.status(200).json(producto)
+        } else{
+            res.status(404).json({mensaje: 'Producto no encontrado'})
         }
-       
 
     } catch(error){
-
+        res.status(500).json({error: 'Error interno del servidor'})
     }
 })
 
@@ -58,7 +57,7 @@ router.post('/', async (req, res) => {
 
         // Agregar el nuevo producto
         await agregarProductos(productoConId)
-        res.status(201).json({ message: 'producto agregado correctamente', producto: productoConId })
+        res.status(201).json({ mensaje: 'producto agregado correctamente', producto: productoConId })
     } catch (error) {
         res.status(500).json({ error: 'error al agregar producto', details: error.message })
     }
@@ -68,7 +67,7 @@ router.post('/', async (req, res) => {
     try {
         const nuevoProducto = req.body
         await agregarProductos(nuevoProducto)
-        res.status(201).json({ message: 'Producto agregado exitosamente' })
+        res.status(201).json({ mensaje: 'Producto agregado exitosamente' })
     } catch (error) {
         res.status(500).json({ error: 'Error al agregar el producto' })
     }
@@ -79,7 +78,7 @@ router.put('/:id', async (req, res) => {
         const idProducto = req.params.id;
         const productoModificado = req.body;
         await modificarProductos(idProducto, productoModificado);
-        res.status(200).json({ message: 'Producto modificado exitosamente' })
+        res.status(200).json({ mensaje: 'Producto modificado exitosamente' })
     } catch (error) {
         res.status(500).json({ error: 'Error al modificar el producto' })
     }
@@ -89,7 +88,7 @@ router.delete('/:id', async (req, res) => {
     try {
         const idProducto = req.params.id
         await eliminarProductos(idProducto)
-        res.status(200).json({ message: 'Producto eliminado exitosamente' })
+        res.status(200).json({ mensaje: 'Producto eliminado exitosamente' })
     } catch (error) {
         res.status(500).json({ error: 'Error al eliminar el producto' })
     }
