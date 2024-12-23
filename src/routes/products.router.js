@@ -75,7 +75,7 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     try {
-        const idProducto = req.params.id;
+        const idProducto = parseInt(req.params.id)
         const productoModificado = req.body;
         await modificarProductos(idProducto, productoModificado);
         res.status(200).json({ mensaje: 'Producto modificado exitosamente' })
@@ -86,7 +86,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
-        const idProducto = req.params.id
+        const idProducto = parseInt(req.params.id)
         await eliminarProductos(idProducto)
         res.status(200).json({ mensaje: 'Producto eliminado exitosamente' })
     } catch (error) {
