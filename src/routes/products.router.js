@@ -63,15 +63,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
-    try {
-        const nuevoProducto = req.body
-        await agregarProductos(nuevoProducto)
-        res.status(201).json({ mensaje: 'Producto agregado exitosamente' })
-    } catch (error) {
-        res.status(500).json({ error: 'Error al agregar el producto' })
-    }
-});
 
 router.put('/:id', async (req, res) => {
     try {

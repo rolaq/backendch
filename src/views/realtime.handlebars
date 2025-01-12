@@ -1,0 +1,23 @@
+<h1>
+    Real Time Products
+</h1>
+<div id="containerProducts">
+
+</div>
+    <form id="productForm">
+        <h2>agregar producto </h2>
+        <input type="text" id="tituloProd" placeholder="Título del producto">
+        <input type="text" id="descripcionProd" placeholder="Descripción">
+        <input type="text" id="codeProd" placeholder="Code">
+        <input type="number" id="precioProd" placeholder="Precio">
+        <input type="number" id="stockProd" placeholder="Stock">
+        <input type="text" id="categoriaProd" placeholder="Categoria">
+        <button type="submit" id="enviar">Agregar Producto</button>
+    </form>
+    <form id="productFormDelete">
+        <h2>Eliminar producto</h2>
+        <input type="number" id="idProd" placeholder="id del producto">
+        <button type="submit" id="enviarDelete">eliminar Producto</button>
+    </form>
+<script src="./socket.io/socket.io.js"></script>
+<script src="index.js"></script>

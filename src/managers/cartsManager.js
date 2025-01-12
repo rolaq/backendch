@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
 import path from 'path'
-import { __dirname } from '../utils/dirname.js'
+import __dirname from '../utils.js'
 
 const ruta = path.join(__dirname, '..', 'managers', 'bdfake', 'carts.json')
 console.log('Ruta:', ruta)
