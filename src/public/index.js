@@ -12,19 +12,18 @@ form.addEventListener('submit', (e) => {
         stock: parseInt(document.getElementById('stockProd').value),
         categoria: document.getElementById('categoriaProd').value,
     }
-    console.log(product);
+    console.log(product)
     socket.emit('newProduct', product); // Envía los datos al servidor
-    form.reset(); // Limpia el formulario
+    form.reset() // Limpia el formulario
 })
 
 const formDelete = document.getElementById('productFormDelete')
 
 formDelete.addEventListener('submit', (e) => {
     e.preventDefault()
-    console.log("formulario delete escuchado");
-    const idProd = {
-        id: document.getElementById('idProd').value
-    }
+    console.log("formulario delete escuchado")
+    const idProd = document.getElementById('idProd').value
+    
 
     socket.emit('deleteProd', idProd)
     formDelete.reset() 

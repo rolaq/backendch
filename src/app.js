@@ -43,14 +43,24 @@ ioServer.on('connection', async (socket) => {
         socket.emit('allProducts', productos)
 
         socket.on('newProduct', async (product) => {
-    
-            await agregarProductos(product)
+
+            const listaproductos = await leerProductos()
+            const nuevoId = listaproductos.length > 0 ? Math.max(...listaproductos.map(p => p.id)) + 1 : 1
+            
+            const newProduct = {
+                id: nuevoId,
+                ...product, 
+                estado: product.estado !== undefined ? product.estado : true 
+            }
+
+            await agregarProductos(newProduct)
 
             const productosActualizados = await leerProductos()
             ioServer.emit('allProducts', productosActualizados)
         })
 
         socket.on('deleteProd', async idProd=>{
+            console.log("id recibido: ", idProd);
             await eliminarProductos(parseInt(idProd))
 
             const productosActualizados = await leerProductos()

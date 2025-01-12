@@ -1,25 +1,5 @@
 [
   {
-    "id": 2,
-    "titulo": "chocolate",
-    "descripcion": "tiene mucho sabor a chocolate.",
-    "code": "chocolate-120",
-    "precio": 20,
-    "estado": true,
-    "stock": 50,
-    "categoria": "golosinas"
-  },
-  {
-    "id": 3,
-    "titulo": "chocolate",
-    "descripcion": "tiene mucho sabor a chocolate.",
-    "code": "chocolate-120",
-    "precio": 20,
-    "estado": true,
-    "stock": 50,
-    "categoria": "golosinas"
-  },
-  {
     "id": 4,
     "titulo": "chocolate",
     "descripcion": "tiene mucho sabor a chocolate.",
@@ -52,16 +32,6 @@
   {
     "id": 7,
     "titulo": "chocolatas",
-    "descripcion": "tiene mucho sabor a chocolate.",
-    "code": "chocolate-120",
-    "precio": 20,
-    "estado": true,
-    "stock": 50,
-    "categoria": "golosinas"
-  },
-  {
-    "id": 8,
-    "titulo": "chocolaasdastas",
     "descripcion": "tiene mucho sabor a chocolate.",
     "code": "chocolate-120",
     "precio": 20,
