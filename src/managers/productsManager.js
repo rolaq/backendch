@@ -53,7 +53,7 @@ const eliminarProductos = async (idProducto)=>{
     }
 }
 
-const modificarProductos = async (idProducto)=>{
+const modificarProductos = async (idProducto, productoModificado)=>{
     try{
         const productos = await leerProductos()
         const productosActualizados = productos.map(p => 

@@ -4,7 +4,7 @@
     "titulo": "chocolate",
     "descripcion": "tiene mucho sabor a chocolate.",
     "code": "chocolate-120",
-    "precio": 20,
+    "precio": 30,
     "estado": true,
     "stock": 50,
     "categoria": "golosinas"

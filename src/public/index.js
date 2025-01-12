@@ -23,7 +23,6 @@ formDelete.addEventListener('submit', (e) => {
     e.preventDefault()
     console.log("formulario delete escuchado")
     const idProd = document.getElementById('idProd').value
-    
 
     socket.emit('deleteProd', idProd)
     formDelete.reset() 
