@@ -5,13 +5,15 @@ import viewsRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
 import __dirname from './utils.js'
 import { Server } from 'socket.io'
-import { leerProductos , agregarProductos, eliminarProductos } from './managers/productsManager.js';
+import { leerProductos , agregarProductos, eliminarProductos } from './managers/productsManager.js'
+import connectionMongo from './connection/mongo.js'
 
 const PORT = 8080
 const app = express()
 
-//configuracion motor de plantillas 
+connectionMongo()
 
+//configuracion motor de plantillas 
 app.engine('handlebars', handlebars.engine())
 app.set('view engine', 'handlebars')
 app.set('views', __dirname + '/views')

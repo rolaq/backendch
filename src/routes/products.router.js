@@ -1,29 +1,48 @@
 import express from 'express'
-import { leerProductos, buscarProducto, agregarProductos, eliminarProductos, modificarProductos } from '../managers/productsManager.js';
+import { productsModel } from '../models/products.model.js'
 
 
 const router = express.Router()
 
 router.get('/', async (req, res) => {
     try {
-        const productos = await leerProductos()
-        res.status(200).json(productos)
+        const { page = 1, limit = 20 } = req.query
+        const options = {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            lean: true 
+        };
+
+        const result = await productsModel.paginate({}, options);
+
+        const response = {
+            status: "success",
+            payload: result.docs,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            page: result.page,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            prevLink: result.hasPrevPage ? `/api/products?page=${result.prevPage}&limit=${limit}` : null,
+            nextLink: result.hasNextPage ? `/api/products?page=${result.nextPage}&limit=${limit}` : null
+        };
+
+        res.json(response)
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener los productos' })
+        res.status(500).json({ status: "error", message: error.message })
     }
 });
+
 
 
 router.get('/:id', async (req, res)=>{
     try{
 
         const idProducto = req.params.id
-        const producto = await buscarProducto(parseInt(idProducto,10))
-        if(producto){
-            res.status(200).json(producto)
-        } else{
-            res.status(404).json({mensaje: 'Producto no encontrado'})
-        }
+    
+        const result = await productsModel.findById(idProducto)
+        res.send({result})
 
     } catch(error){
         res.status(500).json({error: 'Error interno del servidor'})
@@ -32,32 +51,19 @@ router.get('/:id', async (req, res)=>{
 
 router.post('/', async (req, res) => {
     try {
-        const productos = await leerProductos()
-        const nuevoProducto = req.body
-
-        // Generar un ID único
-        const nuevoId = productos.length > 0 ? Math.max(...productos.map(p => p.id)) + 1 : 1
-
-        // Crear el nuevo producto con los campos requeridos
-        const productoConId = {
-            id: nuevoId,
-            titulo: nuevoProducto.titulo,
-            descripcion: nuevoProducto.descripcion,
-            code: nuevoProducto.code,
-            precio: nuevoProducto.precio,
-            estado: nuevoProducto.estado !== undefined ? nuevoProducto.status : true,
-            stock: nuevoProducto.stock,
-            categoria: nuevoProducto.categoria,
-        }
-
-        // Validar campos obligatorios
-        if (!productoConId.titulo || !productoConId.descripcion || !productoConId.code || !productoConId.precio || !productoConId.stock || !productoConId.categoria) {
-            return res.status(400).json({ error: 'Todos los campos obligatorios deben estar presentes' })
-        }
-
-        // Agregar el nuevo producto
-        await agregarProductos(productoConId)
-        res.status(201).json({ mensaje: 'producto agregado correctamente', producto: productoConId })
+        const { titulo , descripcion , code , precio , estado , stock , categoria } = req.body
+        
+        const result = await productsModel.create({
+            titulo,
+            descripcion,
+            code,
+            precio,
+            estado,
+            stock,
+            categoria
+        })
+        
+        res.send(result)
     } catch (error) {
         res.status(500).json({ error: 'error al agregar producto', details: error.message })
     }
@@ -66,7 +72,7 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     try {
-        const idProducto = parseInt(req.params.id)
+        const idProducto = req.params.id
         const productoModificado = req.body;
         await modificarProductos(idProducto, productoModificado);
         res.status(200).json({ mensaje: 'Producto modificado exitosamente' })
