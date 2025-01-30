@@ -5,8 +5,8 @@ import viewsRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
 import __dirname from './utils.js'
 import { Server } from 'socket.io'
-import { leerProductos , agregarProductos, eliminarProductos } from './managers/productsManager.js'
 import connectionMongo from './connection/mongo.js'
+import { productsModel } from './models/products.model.js'
 
 const PORT = 8080
 const app = express()
@@ -37,39 +37,42 @@ const httpServer = app.listen(PORT, ()=>{
 const ioServer = new Server(httpServer)
 
 ioServer.on('connection', async (socket) => {
-    console.log('Usuario conectado:', socket.id);
+
+    console.log('Usuario conectado:', socket.id)
 
     try {
-      
-        const productos = await leerProductos()
+        const productos = await productsModel.find()
         socket.emit('allProducts', productos)
 
         socket.on('newProduct', async (product) => {
+            try {
+                const newProduct = {
+                    ...product, 
+                    estado: product.estado !== undefined ? product.estado : true 
+                };
 
-            const listaproductos = await leerProductos()
-            const nuevoId = listaproductos.length > 0 ? Math.max(...listaproductos.map(p => p.id)) + 1 : 1
-            
-            const newProduct = {
-                id: nuevoId,
-                ...product, 
-                estado: product.estado !== undefined ? product.estado : true 
+                await productsModel.create(newProduct)
+                const productosActualizados = await productsModel.find()
+                ioServer.emit('allProducts', productosActualizados)
+            } catch (error) {
+                console.error("Error al agregar producto:", error)
             }
-
-            await agregarProductos(newProduct)
-
-            const productosActualizados = await leerProductos()
-            ioServer.emit('allProducts', productosActualizados)
         })
 
-        socket.on('deleteProd', async idProd=>{
-            console.log("id recibido: ", idProd);
-            await eliminarProductos(parseInt(idProd))
+        socket.on('deleteProd', async (idProd) => {
+            try {
+                console.log("producto eliminado id: ", idProd)
 
-            const productosActualizados = await leerProductos()
-            ioServer.emit('allProducts', productosActualizados)
-        })
+                await productsModel.findByIdAndDelete(idProd)
+
+                const productosActualizados = await productsModel.find()
+                ioServer.emit('allProducts', productosActualizados)
+            } catch (error) {
+                console.error("Error al eliminar producto:", error)
+            }
+        });
+
     } catch (error) {
-        console.error('Error al gestionar productos:', error);
+        console.error('Error al gestionar productos:', error)
     }
-
 });

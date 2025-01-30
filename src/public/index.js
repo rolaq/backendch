@@ -39,7 +39,7 @@ socket.on('allProducts', products=>{
                 <p> descripcion: ${product.descripcion}</p>
                 <p> precio: $ ${product.precio}</p>
                 <p> stock: ${product.stock}</p>
-                <p> id: ${product.id} </p>
+                <p> id: ${product._id} </p>
             </div>
         `
     })
